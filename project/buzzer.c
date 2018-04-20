@@ -2,7 +2,6 @@
 #include "buzzer.h"
 #include <msp430.h>
 
-static int counter = 0; //Counter to keep track of the notes in the Star Wars Theme song
 
 void buzzer_init(){
   /*
@@ -12,7 +11,7 @@ void buzzer_init(){
     P2SEL.6 must be 1
     Also: P2.6 direction must be output
   */
-  timerAUpmode(); //used to drive speaker
+  timerAUpmode();
   P2SEL2 &= ~(BIT6 | BIT7);
   P2SEL &= ~BIT7;
   P2SEL |= BIT6;
@@ -20,30 +19,42 @@ void buzzer_init(){
 }
 
 /*
-  starWarsTheme is a method which calls the buzzer_set_period method
-  from the buzzer.h file to produce the sound of the frequency specified on
-  each case. When the method is called consistently, the song from the Star Wars
-  movie is played on the MSP430's speaker.
+Duration of tone
 */
-void starWarsTheme(){
-  switch(counter){
-  case 0: buzzer_set_period(950); counter++; break; //Lower C note
-  case 1:
-  case 6:
-  case 11: buzzer_set_period(630); counter++; break; //G note
-  case 2:
-  case 7:
-  case 12:
-  case 14: buzzer_set_period(710); counter++; break; //F note
-  case 3:
-  case 8:
-  case 13: buzzer_set_period(750); counter++; break; //E note
-  case 4:
-  case 9:
-  case 15: buzzer_set_period(840); if(counter==15){counter = 0;} else{counter++;}; break;//D note
-  case 5:
-  case 10: buzzer_set_period(475); counter++; break; //C note
+void tone(int tone, int duration){
+  int i;
+  for(i = 0; i<duration; i++){
+    buzzer_set_period(tone);
+    for(i = 0; i<10000; i++);
   }
+}
+
+
+  /*
+  Delay for sound
+  */
+    void delay(unsigned int time){
+      unsigned int i;
+      for(i = 0; i<= time; i++)
+	for(i = 0; i< 50000; i++);
+    }
+
+/*
+  music method contains the tones that will be played when a player wins.
+*/
+void music(){
+  tone(660, 100);
+  delay(150);
+  tone(660,100);
+  delay(300);
+  tone(510,100);
+  delay(100);
+  tone(660,100);
+  delay(300);
+  tone(770,100);
+  delay(150);
+  tone(380,100);
+  delay(575);
 }
 
 void buzzer_set_period(short cycles){

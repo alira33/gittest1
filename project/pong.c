@@ -275,8 +275,10 @@ void wdt_c_handler()
 	drawString5x7(28, 50, "PLAYER 2 WON!", COLOR_BLACK, COLOR_BLUE);
       break;
     }
-    /* Music */
-    starWarsSong();
+    /* 
+    call music method
+    */
+    music();
     /* To move the paddles */
     if(switches & (1<<3)){
       moveUp(&ml2, &fieldFence);
