@@ -1,3 +1,5 @@
+
+
 /** \file pong.c
  *  \This is an implementation of the Pong game.
  *  While the CPU is running the green LED is on, and
@@ -255,6 +257,44 @@ void main()
   }
 }
 
+/*Duration of tone */
+void tone(int tone, int duration){
+  int i;
+  for(i = 0; i < duration; i++){
+    buzzer_set_period(tone);
+    for(i = 0; i < 10000; i++);
+  }
+}
+
+/* Delay for sound */
+void delay(unsigned int time){
+  unsigned int i;
+  for(i = 0; i <= time; i++)
+    for(i = 0; i < 50000; i++);
+}
+
+void song(){
+  tone(550, 100);
+  delay(1150);
+  tone(610,100);
+  delay(1300);
+  tone(610, 100);
+  delay(1300);
+  tone(550, 100);
+  delay(1100);
+  tone(760, 100);
+  delay(1300);
+  tone(770, 100);
+  delay(1550);
+  tone(380, 100);
+  delay(1575);
+}
+
+void music(){
+  for(int i = 0; i<= 1000; i++)
+    song();
+}
+
 /** Watchdog timer interrupt handler. 15 interrupts/sec */
 void wdt_c_handler()
 {
@@ -275,10 +315,16 @@ void wdt_c_handler()
 	drawString5x7(28, 50, "PLAYER 2 WON!", COLOR_BLACK, COLOR_BLUE);
       break;
     }
-    /* 
-    call music method
-    */
+    /* Call music method */
     music();
+    //tone()
+    //delay(350);
+    // tone(500, 100);
+    //delay(300);
+    //tone(550, 100);
+    //delay(575);
+    
+
     /* To move the paddles */
     if(switches & (1<<3)){
       moveUp(&ml2, &fieldFence);
@@ -297,3 +343,4 @@ void wdt_c_handler()
   }
   P1OUT &= ~GREEN_LED;		    /**< Green LED off when cpu off */
 }
+ 
