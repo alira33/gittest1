@@ -54,6 +54,7 @@ void abCircleGetBounds(const AbCircle *circle, const Vec2 *centerPos, Region *bo
 //AbRect letterP = {abRectGetBounds, abSlicedRectCheck, 10,15};
 //Region fence = {{10,20}, {SHORT_EDGE_PIXELS-10, LONG_EDGE_PIXELS-10}};
 AbRect rect = {abRectGetBounds, abRectCheck, {2,10}};
+AbRect rect2 = {abRectGetBounds, abRectCheck, {50,2}};
 
 u_char player1Score = '0';
 u_char player2Score = '0';
@@ -65,13 +66,21 @@ AbRectOutline fieldOutline = {
   {screenWidth/2-5, screenHeight/2-15}
 };
 
+Layer upperLayer = {
+  (AbShape *)&rect2,
+  {screenWidth/2, screenHeight/2},
+  {0,0}, {0,0},
+  COLOR_WHITE,
+  0
+};
+
 /*pac*/
 Layer pac  = {
   (AbShape *)&circle14,
   {screenWidth/2, screenHeight/2},
   {0,0}, {0,0},
   COLOR_ORANGE,
-  0,
+  &upperLayer,
 };
 
 /* Field Layer */
