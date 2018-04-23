@@ -65,6 +65,14 @@ AbRectOutline fieldOutline = {
   {screenWidth/2-5, screenHeight/2-15}
 };
 
+/*pac*/
+Layer pac  = {
+  (AbShape *)&circle14,
+  {screenWidth/2, screenHeight/2},
+  {0,0}, {0,0},
+  COLOR_ORANGE,
+  0,
+};
 
 /* Field Layer */
 Layer fieldLayer = {
@@ -72,7 +80,7 @@ Layer fieldLayer = {
   {screenWidth/2, screenHeight/2},
   {0,0}, {0,0},
   COLOR_BLACK,
-  //&letterPLayer
+  &pac
 };
 
 /* Ball */
