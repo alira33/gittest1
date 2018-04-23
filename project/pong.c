@@ -278,10 +278,10 @@ void main()
     movLayerDraw(&ml3, &layer2);
     movLayerDraw(&ml2, &layer2);
     movLayerDraw(&ml1, &layer2);
-    drawChar5x7(5, 5, player1Score, COLOR_BLACK, COLOR_BLUE); //Scoreboard
-    drawChar5x7(115, 5, player2Score, COLOR_BLACK, COLOR_BLUE); //Scoreboard
-    drawString5x7(5, 150, "X X X X PONG X X X X", COLOR_BLACK, COLOR_BLUE);
-    drawString5x7(38, 5, "<-SCORE->", COLOR_BLACK, COLOR_BLUE);
+    drawChar5x7(5, 5, player1Score, COLOR_WHITE, COLOR_BLUE); //Scoreboard
+    drawChar5x7(115, 5, player2Score, COLOR_WHITE, COLOR_BLUE); //Scoreboard
+    drawString5x7(20, 150, "PING PONG ARCH I", COLOR_WHITE, COLOR_BLUE);
+    drawString5x7(50, 5, "SCORE", COLOR_WHITE, COLOR_BLUE);
   }
 }
 
@@ -338,9 +338,9 @@ void wdt_c_handler()
     case 1:
       layerDraw(&layer2);
       if(player1Score > player2Score)
-	drawString5x7(28, 50, "PLAYER 1 WON!", COLOR_BLACK, COLOR_BLUE);
+	drawString5x7(30, 50, "PLAYER 1 WON!", COLOR_WHITE, COLOR_BLUE);
       else if(player1Score < player2Score)
-	drawString5x7(28, 50, "PLAYER 2 WON!", COLOR_BLACK, COLOR_BLUE);
+	drawString5x7(30, 50, "PLAYER 2 WON!", COLOR_WHITE, COLOR_BLUE);
       break;
     }
     /* Call music method */
