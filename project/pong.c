@@ -13,6 +13,7 @@
 #include <p2switches.h>
 #include <shape.h>
 #include <abCircle.h>
+#include <_abCircle.h>
 #include "buzzer.h"
 
 
@@ -26,14 +27,32 @@ abSlicedRectCheck(const AbRect *rect, const Vec2 *centerPos, const Vec2 *pixel)
   vec2Sub(&relPos, pixel, centerPos); /* vector from center to pixel */
 
   /* reject pixels in slice */
-  if (relPos.axes[0] >= 0 && relPos.axes[1]/2 < relPos.axes[1]) 
+  if (relPos.axes[0] >= 0 && relPos.axes[1]/3 < relPos.axes[1]) 
     return 0;
   else
     return abRectCheck(rect, centerPos, pixel);
 }
+/*added*/
+int abCircleCheck(const AbCircle *circle, const Vec2 *centerPos, const Vec2 *pixel){
+  u_char radius = circle->radius;
+  int axis;
+  Vec2 relPos;
+  vec2Sub(&relPos, pixel, centerPos);
+  vec2Abs(&relPos);
+  return(relPos.axes[0] <= radius && circle->chords[relPos.axes[0]] >= relPos.axes[1]);
+}
 
-AbRect letterP = {abRectGetBounds, abSlicedRectCheck, 10,15};
-Region fence = {{10,20}, {SHORT_EDGE_PIXELS-10, LONG_EDGE_PIXELS-10}};
+void abCircleGetBounds(const AbCircle *circle, const Vec2 *centerPos, Region *bounds){
+  u_char axis, radius = circle->radius;
+  for(axis = 0; axis < 2; axis ++){
+    bounds->topLeft.axes[axis] = centerPos->axes[axis] - radius;
+    bounds->botRight.axes[axis] = centerPos->axes[axis] + radius;
+  }
+  regionClipScreen(bounds);
+}
+
+//AbRect letterP = {abRectGetBounds, abSlicedRectCheck, 10,15};
+//Region fence = {{10,20}, {SHORT_EDGE_PIXELS-10, LONG_EDGE_PIXELS-10}};
 AbRect rect = {abRectGetBounds, abRectCheck, {2,10}};
 
 u_char player1Score = '0';
@@ -46,14 +65,6 @@ AbRectOutline fieldOutline = {
   {screenWidth/2-5, screenHeight/2-15}
 };
 
-/* Letter P */
-Layer letterPLayer = {
-  (AbShape *)&letterP,
-  {screenWidth/2-4, screenHeight/2+7},
-  {0,0}, {0,0},			       
-  COLOR_BLACK,
-  0,
-};
 
 /* Field Layer */
 Layer fieldLayer = {
@@ -61,7 +72,7 @@ Layer fieldLayer = {
   {screenWidth/2, screenHeight/2},
   {0,0}, {0,0},
   COLOR_BLACK,
-  &letterPLayer
+  //&letterPLayer
 };
 
 /* Ball */
@@ -75,7 +86,7 @@ Layer layer3 = {
 
 /* Red Paddle */
 Layer layer1 = {		
-  (AbShape *) &rect,
+  (AbShape *)&rect,
   {screenWidth/2-50, screenHeight/2+5},    
   {0,0}, {0,0},				   
   COLOR_RED,
@@ -316,14 +327,7 @@ void wdt_c_handler()
       break;
     }
     /* Call music method */
-    music();
-    //tone()
-    //delay(350);
-    // tone(500, 100);
-    //delay(300);
-    //tone(550, 100);
-    //delay(575);
-    
+    //    music();    
 
     /* To move the paddles */
     if(switches & (1<<3)){
